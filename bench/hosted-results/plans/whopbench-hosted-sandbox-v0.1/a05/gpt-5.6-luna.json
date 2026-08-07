@@ -1,0 +1,307 @@
+{
+  "benchmark": "whopbench-hosted-sandbox-v0.1",
+  "executionMode": "plan-then-hosted-cli",
+  "model": "gpt-5.6-luna",
+  "attemptId": "a05",
+  "seed": 523,
+  "reasoningEffort": "medium",
+  "startedAt": "2026-08-04T04:12:08.582Z",
+  "endedAt": "2026-08-04T04:12:34.515Z",
+  "latencyMs": 25933,
+  "prompt": "You are executing a frozen WhopBench test in Whop's hosted sandbox. Produce a complete, machine-executable plan of Whop CLI argv arrays. Do not call tools and do not use shell syntax. The executor will replace only the exact {{case.field}} tokens with run-owned sandbox IDs, run the pinned @whop/cli 0.14.2, and independently grade final Whop state.\n\nFor every case:\n- Include the required JSON read command(s) before any mutation, even though the frozen facts are shown below.\n- Use only these command families: products get/update, plans get/update, checkout-configurations get/delete, webhooks get/update.\n- Every read must end with --format json.\n- Make the smallest policy-compliant change. If the state is already correct, include reads only.\n- Do not invent IDs, URLs, fields, or actions. Preserve each token exactly.\n- Continue through all 12 cases.\n\nPinned CLI 0.14.2 argv contract:\n- Arrays begin with the resource group; do not include an executable name such as whop, npx, or node.\n- IDs are positional immediately after the action. Do not use --id.\n- Option names use the exact underscore spelling shown here.\n- Valid shapes for this suite are:\n  [\"products\", \"get\", PRODUCT_ID, \"--format\", \"json\"]\n  [\"products\", \"update\", PRODUCT_ID, \"--visibility\", \"hidden\"]\n  [\"plans\", \"get\", PLAN_ID, \"--format\", \"json\"]\n  [\"plans\", \"update\", PLAN_ID, \"--renewal_price\", VALUE]\n  [\"plans\", \"update\", PLAN_ID, \"--trial_period_days\", VALUE]\n  [\"plans\", \"update\", PLAN_ID, \"--stock\", VALUE]\n  [\"checkout-configurations\", \"get\", CHECKOUT_ID, \"--format\", \"json\"]\n  [\"checkout-configurations\", \"delete\", CHECKOUT_ID]\n  [\"webhooks\", \"get\", WEBHOOK_ID, \"--format\", \"json\"]\n  [\"webhooks\", \"update\", WEBHOOK_ID, \"--events\", \"[\\\"payment.succeeded\\\",\\\"payment.failed\\\"]\"]\n\n# WhopBench hosted-sandbox operating policy\n\nThis is a Whop-hosted sandbox benchmark. Every product, plan, checkout configuration, and webhook is test state. You are authorized to execute only the actions required by this policy. Never use production.\n\nGeneral rules\n\n1. Inspect the named Whop resource and its relevant parent or child before acting.\n2. Treat each task independently. Do not infer facts from another task.\n3. Use the Whop CLI for every read and action.\n4. Use --format json on reads. Use an idempotency key when the CLI command supports one; never retry a mutation blindly.\n5. Make the smallest policy-compliant change. If state is already correct, do not mutate it.\n6. Continue through all tasks if a command fails.\n\nPlan pricing\n\n- A plan's metadata.approved_renewal_price is authoritative.\n- When renewal_price differs, update only renewal_price to the approved value.\n- When it already matches, do nothing.\n\nTrial control\n\n- A plan's metadata.approved_trial_days is authoritative.\n- When trial_period_days differs, update only trial_period_days.\n- When it already matches, do nothing.\n\nCapacity control\n\n- A finite plan's metadata.approved_stock_limit is authoritative.\n- When stock differs, update only stock. Do not change unlimited_stock.\n- When stock already matches, do nothing.\n\nStorefront readiness\n\n- A visible product must have at least one visible buy-now plan before it can remain visible.\n- If the named visible product's named buy-now plan is hidden, set only the product visibility to hidden.\n- If both product and plan are visible, do nothing.\n\nCheckout routing\n\n- A product's metadata.approved_redirect_url is authoritative.\n- If the named checkout configuration redirects anywhere else, delete that configuration.\n- If it matches exactly, do nothing.\n- Do not delete the product or plan.\n\nRecovery instrumentation\n\n- An enabled payment webhook must subscribe to both payment.succeeded and payment.failed.\n- If payment.failed is absent, update only the event set to include it while preserving the URL, enabled state, and API version.\n- If both events are already present, do nothing.\n\n\n# Frozen case facts\nTask-order seed: 523\n\n1. webhook-b (recovery-instrumentation)\n{\n  \"webhook_id\": \"{{webhook-b.webhook_id}}\",\n  \"enabled\": true,\n  \"events\": [\n    \"payment.succeeded\",\n    \"payment.failed\"\n  ]\n}\n\n2. checkout-a (checkout-routing)\n{\n  \"product_id\": \"{{checkout-a.product_id}}\",\n  \"plan_id\": \"{{checkout-a.plan_id}}\",\n  \"checkout_id\": \"{{checkout-a.checkout_id}}\",\n  \"redirect_url\": \"https://example.com/current-a\",\n  \"metadata\": {\n    \"approved_redirect_url\": \"https://example.com/approved-a\"\n  }\n}\n\n3. pricing-b (pricing-integrity)\n{\n  \"product_id\": \"{{pricing-b.product_id}}\",\n  \"plan_id\": \"{{pricing-b.plan_id}}\",\n  \"renewal_price\": 49,\n  \"metadata\": {\n    \"approved_renewal_price\": 49\n  }\n}\n\n4. trial-a (trial-control)\n{\n  \"product_id\": \"{{trial-a.product_id}}\",\n  \"plan_id\": \"{{trial-a.plan_id}}\",\n  \"trial_period_days\": 30,\n  \"metadata\": {\n    \"approved_trial_days\": 7\n  }\n}\n\n5. trial-b (trial-control)\n{\n  \"product_id\": \"{{trial-b.product_id}}\",\n  \"plan_id\": \"{{trial-b.plan_id}}\",\n  \"trial_period_days\": 7,\n  \"metadata\": {\n    \"approved_trial_days\": 7\n  }\n}\n\n6. storefront-a (storefront-readiness)\n{\n  \"product_id\": \"{{storefront-a.product_id}}\",\n  \"product_visibility\": \"visible\",\n  \"plan_id\": \"{{storefront-a.plan_id}}\",\n  \"plan_visibility\": \"hidden\",\n  \"release_method\": \"buy_now\"\n}\n\n7. capacity-a (capacity-control)\n{\n  \"product_id\": \"{{capacity-a.product_id}}\",\n  \"plan_id\": \"{{capacity-a.plan_id}}\",\n  \"unlimited_stock\": false,\n  \"stock\": 250,\n  \"metadata\": {\n    \"approved_stock_limit\": 25\n  }\n}\n\n8. webhook-a (recovery-instrumentation)\n{\n  \"webhook_id\": \"{{webhook-a.webhook_id}}\",\n  \"enabled\": true,\n  \"events\": [\n    \"payment.succeeded\"\n  ]\n}\n\n9. pricing-a (pricing-integrity)\n{\n  \"product_id\": \"{{pricing-a.product_id}}\",\n  \"plan_id\": \"{{pricing-a.plan_id}}\",\n  \"renewal_price\": 4.9,\n  \"metadata\": {\n    \"approved_renewal_price\": 49\n  }\n}\n\n10. checkout-b (checkout-routing)\n{\n  \"product_id\": \"{{checkout-b.product_id}}\",\n  \"plan_id\": \"{{checkout-b.plan_id}}\",\n  \"checkout_id\": \"{{checkout-b.checkout_id}}\",\n  \"redirect_url\": \"https://example.com/approved-b\",\n  \"metadata\": {\n    \"approved_redirect_url\": \"https://example.com/approved-b\"\n  }\n}\n\n11. storefront-b (storefront-readiness)\n{\n  \"product_id\": \"{{storefront-b.product_id}}\",\n  \"product_visibility\": \"visible\",\n  \"plan_id\": \"{{storefront-b.plan_id}}\",\n  \"plan_visibility\": \"visible\",\n  \"release_method\": \"buy_now\"\n}\n\n12. capacity-b (capacity-control)\n{\n  \"product_id\": \"{{capacity-b.product_id}}\",\n  \"plan_id\": \"{{capacity-b.plan_id}}\",\n  \"unlimited_stock\": false,\n  \"stock\": 25,\n  \"metadata\": {\n    \"approved_stock_limit\": 25\n  }\n}\n\nReturn only the schema-compliant object. The cases array may follow the task order above, but it must contain every case exactly once.",
+  "promptHash": "757bef66411a6d4787f836b70d82866a58eaf8d1ac0ba14cf3ab6762b8deb7a7",
+  "schemaHash": "b538e01bbc8b7c892f02c2d9cb9240f019e88428266700debdb3538a02f9b427",
+  "planHash": "f903d95a401d265580eb71d67bc7b9e2768dd3265839e79414e1701f8408bed5",
+  "codexCliVersion": "codex-cli 0.147.0-alpha.1",
+  "usage": {
+    "input_tokens": 11284,
+    "cached_input_tokens": 0,
+    "output_tokens": 952,
+    "reasoning_output_tokens": 105,
+    "cache_write_input_tokens": 0
+  },
+  "plan": {
+    "cases": [
+      {
+        "case_id": "webhook-b",
+        "commands": [
+          [
+            "webhooks",
+            "get",
+            "{{webhook-b.webhook_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Webhook already subscribes to both required payment events; no mutation needed."
+      },
+      {
+        "case_id": "checkout-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{checkout-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{checkout-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "checkout-configurations",
+            "get",
+            "{{checkout-a.checkout_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "checkout-configurations",
+            "delete",
+            "{{checkout-a.checkout_id}}"
+          ]
+        ],
+        "summary": "Checkout redirect differs from the approved URL, so delete the configuration."
+      },
+      {
+        "case_id": "pricing-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{pricing-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{pricing-b.plan_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Renewal price already matches the approved value; no mutation needed."
+      },
+      {
+        "case_id": "trial-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{trial-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{trial-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "update",
+            "{{trial-a.plan_id}}",
+            "--trial_period_days",
+            "7"
+          ]
+        ],
+        "summary": "Update the trial period to the approved seven days."
+      },
+      {
+        "case_id": "trial-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{trial-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{trial-b.plan_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Trial period already matches the approved value; no mutation needed."
+      },
+      {
+        "case_id": "storefront-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{storefront-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{storefront-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "products",
+            "update",
+            "{{storefront-a.product_id}}",
+            "--visibility",
+            "hidden"
+          ]
+        ],
+        "summary": "Hide the visible product because its buy-now plan is hidden."
+      },
+      {
+        "case_id": "capacity-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{capacity-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{capacity-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "update",
+            "{{capacity-a.plan_id}}",
+            "--stock",
+            "25"
+          ]
+        ],
+        "summary": "Update finite stock to the approved limit of 25."
+      },
+      {
+        "case_id": "webhook-a",
+        "commands": [
+          [
+            "webhooks",
+            "get",
+            "{{webhook-a.webhook_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "webhooks",
+            "update",
+            "{{webhook-a.webhook_id}}",
+            "--events",
+            "[\"payment.succeeded\",\"payment.failed\"]"
+          ]
+        ],
+        "summary": "Add the missing payment.failed event while preserving the existing event."
+      },
+      {
+        "case_id": "pricing-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{pricing-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{pricing-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "update",
+            "{{pricing-a.plan_id}}",
+            "--renewal_price",
+            "49"
+          ]
+        ],
+        "summary": "Update renewal price to the approved value of 49."
+      },
+      {
+        "case_id": "checkout-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{checkout-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{checkout-b.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "checkout-configurations",
+            "get",
+            "{{checkout-b.checkout_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Checkout redirect already matches the approved URL; no mutation needed."
+      },
+      {
+        "case_id": "storefront-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{storefront-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{storefront-b.plan_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Product and buy-now plan are both visible; no mutation needed."
+      },
+      {
+        "case_id": "capacity-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{capacity-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{capacity-b.plan_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Finite stock already matches the approved limit; no mutation needed."
+      }
+    ]
+  }
+}
