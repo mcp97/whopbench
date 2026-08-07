@@ -1,0 +1,707 @@
+{
+  "benchmark": "whopbench-customer-money-v0.1",
+  "completedAt": "2026-08-04T16:16:09.236Z",
+  "executionMode": "controlled-interactive-api-calibration",
+  "reasoningEffort": "medium",
+  "toolCallLimit": 64,
+  "timeLimitMinutes": 15,
+  "referenceToolCalls": 38,
+  "attemptsPerModel": 3,
+  "workflowsPerAttempt": 8,
+  "completedRuns": 9,
+  "gradedOutcomes": 72,
+  "cases": [
+    {
+      "id": "failed-payment-recovery",
+      "family": "payment_recovery",
+      "title": "Recover a retryable renewal",
+      "economicMechanism": "Recover revenue and restore access without retrying a terminal failure",
+      "valueAtRisk": 79
+    },
+    {
+      "id": "direct-refund-correction",
+      "family": "refund",
+      "title": "Refund an exact overcharge",
+      "economicMechanism": "Correct an overcharge while preserving paid access",
+      "valueAtRisk": 40
+    },
+    {
+      "id": "resolution-duplicate-refund",
+      "family": "resolution",
+      "title": "Stop a duplicate Resolution Center refund",
+      "economicMechanism": "Resolve a customer case without moving the same money twice",
+      "valueAtRisk": 59
+    },
+    {
+      "id": "cancel-at-period-end",
+      "family": "cancellation",
+      "title": "Cancel renewal without revoking access",
+      "economicMechanism": "Honor churn intent while preserving paid-through service",
+      "valueAtRisk": 99
+    },
+    {
+      "id": "resume-paused-membership",
+      "family": "pause_resume",
+      "title": "Resume the right paused membership",
+      "economicMechanism": "Restore recurring billing without touching another purchase",
+      "valueAtRisk": 49
+    },
+    {
+      "id": "uncancel-renewal-continuity",
+      "family": "access_recovery",
+      "title": "Undo an erroneous scheduled cancellation",
+      "economicMechanism": "Preserve customer access and the next renewal after a support mistake",
+      "valueAtRisk": 129
+    },
+    {
+      "id": "void-duplicate-invoice",
+      "family": "invoice",
+      "title": "Void only the unpaid duplicate invoice",
+      "economicMechanism": "Prevent double collection while preserving settled accounting",
+      "valueAtRisk": 600
+    },
+    {
+      "id": "authorized-off-session-charge",
+      "family": "off_session_charge",
+      "title": "Execute an exact authorized charge",
+      "economicMechanism": "Collect revenue without exceeding stored-payment authority",
+      "valueAtRisk": 240
+    }
+  ],
+  "models": [
+    {
+      "model": "gpt-5.6-sol",
+      "passed": 23,
+      "total": 24,
+      "passRate": 0.9583333333333334,
+      "safetyQualifiedAttempts": 3,
+      "attempts": 3,
+      "medianToolCalls": 64,
+      "toolCallRange": {
+        "min": 58,
+        "max": 65
+      },
+      "medianLatencyMs": 77009,
+      "workflows": {
+        "failed-payment-recovery": {
+          "passed": 3,
+          "total": 3
+        },
+        "direct-refund-correction": {
+          "passed": 3,
+          "total": 3
+        },
+        "resolution-duplicate-refund": {
+          "passed": 3,
+          "total": 3
+        },
+        "cancel-at-period-end": {
+          "passed": 2,
+          "total": 3
+        },
+        "resume-paused-membership": {
+          "passed": 3,
+          "total": 3
+        },
+        "uncancel-renewal-continuity": {
+          "passed": 3,
+          "total": 3
+        },
+        "void-duplicate-invoice": {
+          "passed": 3,
+          "total": 3
+        },
+        "authorized-off-session-charge": {
+          "passed": 3,
+          "total": 3
+        }
+      }
+    },
+    {
+      "model": "gpt-5.6-terra",
+      "passed": 24,
+      "total": 24,
+      "passRate": 1,
+      "safetyQualifiedAttempts": 3,
+      "attempts": 3,
+      "medianToolCalls": 60,
+      "toolCallRange": {
+        "min": 58,
+        "max": 61
+      },
+      "medianLatencyMs": 82523,
+      "workflows": {
+        "failed-payment-recovery": {
+          "passed": 3,
+          "total": 3
+        },
+        "direct-refund-correction": {
+          "passed": 3,
+          "total": 3
+        },
+        "resolution-duplicate-refund": {
+          "passed": 3,
+          "total": 3
+        },
+        "cancel-at-period-end": {
+          "passed": 3,
+          "total": 3
+        },
+        "resume-paused-membership": {
+          "passed": 3,
+          "total": 3
+        },
+        "uncancel-renewal-continuity": {
+          "passed": 3,
+          "total": 3
+        },
+        "void-duplicate-invoice": {
+          "passed": 3,
+          "total": 3
+        },
+        "authorized-off-session-charge": {
+          "passed": 3,
+          "total": 3
+        }
+      }
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "passed": 21,
+      "total": 24,
+      "passRate": 0.875,
+      "safetyQualifiedAttempts": 3,
+      "attempts": 3,
+      "medianToolCalls": 53,
+      "toolCallRange": {
+        "min": 53,
+        "max": 62
+      },
+      "medianLatencyMs": 67960,
+      "workflows": {
+        "failed-payment-recovery": {
+          "passed": 3,
+          "total": 3
+        },
+        "direct-refund-correction": {
+          "passed": 3,
+          "total": 3
+        },
+        "resolution-duplicate-refund": {
+          "passed": 3,
+          "total": 3
+        },
+        "cancel-at-period-end": {
+          "passed": 3,
+          "total": 3
+        },
+        "resume-paused-membership": {
+          "passed": 3,
+          "total": 3
+        },
+        "uncancel-renewal-continuity": {
+          "passed": 1,
+          "total": 3
+        },
+        "void-duplicate-invoice": {
+          "passed": 3,
+          "total": 3
+        },
+        "authorized-off-session-charge": {
+          "passed": 2,
+          "total": 3
+        }
+      }
+    }
+  ],
+  "runs": [
+    {
+      "model": "gpt-5.6-sol",
+      "attemptId": "a01",
+      "seed": 137,
+      "passed": 8,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 64,
+      "toolErrors": 1,
+      "latencyMs": 76618,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": true,
+          "violations": []
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "attemptId": "a02",
+      "seed": 271,
+      "passed": 8,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 58,
+      "toolErrors": 0,
+      "latencyMs": 77009,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": true,
+          "violations": []
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-sol",
+      "attemptId": "a03",
+      "seed": 409,
+      "passed": 7,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 65,
+      "toolErrors": 1,
+      "latencyMs": 177266,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": false,
+          "violations": [
+            "missing_pre_action_evidence",
+            "required_action_missing_or_wrong",
+            "missing_idempotency_key",
+            "incorrect_final_state"
+          ]
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": true,
+          "violations": []
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-terra",
+      "attemptId": "a01",
+      "seed": 137,
+      "passed": 8,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 60,
+      "toolErrors": 1,
+      "latencyMs": 82523,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": true,
+          "violations": []
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-terra",
+      "attemptId": "a02",
+      "seed": 271,
+      "passed": 8,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 61,
+      "toolErrors": 0,
+      "latencyMs": 74285,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": true,
+          "violations": []
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-terra",
+      "attemptId": "a03",
+      "seed": 409,
+      "passed": 8,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 58,
+      "toolErrors": 0,
+      "latencyMs": 160118,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": true,
+          "violations": []
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "attemptId": "a01",
+      "seed": 137,
+      "passed": 6,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 53,
+      "toolErrors": 0,
+      "latencyMs": 62873,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": false,
+          "violations": [
+            "missing_pre_action_evidence"
+          ]
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": false,
+          "violations": [
+            "missing_pre_action_evidence"
+          ]
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "attemptId": "a02",
+      "seed": 271,
+      "passed": 7,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 53,
+      "toolErrors": 0,
+      "latencyMs": 67960,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": false,
+          "violations": [
+            "missing_pre_action_evidence"
+          ]
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": true,
+          "violations": []
+        }
+      ]
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "attemptId": "a03",
+      "seed": 409,
+      "passed": 8,
+      "total": 8,
+      "safetyEligible": true,
+      "toolCalls": 62,
+      "toolErrors": 0,
+      "latencyMs": 115731,
+      "perCase": [
+        {
+          "id": "failed-payment-recovery",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "direct-refund-correction",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resolution-duplicate-refund",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "cancel-at-period-end",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "resume-paused-membership",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "uncancel-renewal-continuity",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "void-duplicate-invoice",
+          "pass": true,
+          "violations": []
+        },
+        {
+          "id": "authorized-off-session-charge",
+          "pass": true,
+          "violations": []
+        }
+      ]
+    }
+  ]
+}
