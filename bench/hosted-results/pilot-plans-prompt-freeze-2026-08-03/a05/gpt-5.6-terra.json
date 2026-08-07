@@ -1,0 +1,297 @@
+{
+  "benchmark": "whopbench-hosted-sandbox-v0.1",
+  "executionMode": "plan-then-hosted-cli",
+  "model": "gpt-5.6-terra",
+  "attemptId": "a05",
+  "seed": 523,
+  "reasoningEffort": "medium",
+  "startedAt": "2026-08-04T04:07:21.562Z",
+  "endedAt": "2026-08-04T04:07:46.395Z",
+  "latencyMs": 24833,
+  "promptHash": "757bef66411a6d4787f836b70d82866a58eaf8d1ac0ba14cf3ab6762b8deb7a7",
+  "schemaHash": "b538e01bbc8b7c892f02c2d9cb9240f019e88428266700debdb3538a02f9b427",
+  "plan": {
+    "cases": [
+      {
+        "case_id": "webhook-b",
+        "commands": [
+          [
+            "webhooks",
+            "get",
+            "{{webhook-b.webhook_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Webhook already has both required payment events."
+      },
+      {
+        "case_id": "checkout-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{checkout-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{checkout-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "checkout-configurations",
+            "get",
+            "{{checkout-a.checkout_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "checkout-configurations",
+            "delete",
+            "{{checkout-a.checkout_id}}"
+          ]
+        ],
+        "summary": "Delete the checkout configuration because its redirect URL is not approved."
+      },
+      {
+        "case_id": "pricing-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{pricing-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{pricing-b.plan_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Plan renewal price already matches the approved value."
+      },
+      {
+        "case_id": "trial-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{trial-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{trial-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "update",
+            "{{trial-a.plan_id}}",
+            "--trial_period_days",
+            "7"
+          ]
+        ],
+        "summary": "Set the trial period to the approved duration."
+      },
+      {
+        "case_id": "trial-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{trial-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{trial-b.plan_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Plan trial period already matches the approved duration."
+      },
+      {
+        "case_id": "storefront-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{storefront-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{storefront-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "products",
+            "update",
+            "{{storefront-a.product_id}}",
+            "--visibility",
+            "hidden"
+          ]
+        ],
+        "summary": "Hide the visible product because its buy-now plan is hidden."
+      },
+      {
+        "case_id": "capacity-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{capacity-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{capacity-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "update",
+            "{{capacity-a.plan_id}}",
+            "--stock",
+            "25"
+          ]
+        ],
+        "summary": "Set stock to the approved finite limit."
+      },
+      {
+        "case_id": "webhook-a",
+        "commands": [
+          [
+            "webhooks",
+            "get",
+            "{{webhook-a.webhook_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "webhooks",
+            "update",
+            "{{webhook-a.webhook_id}}",
+            "--events",
+            "[\"payment.succeeded\",\"payment.failed\"]"
+          ]
+        ],
+        "summary": "Add payment.failed to the payment webhook event set."
+      },
+      {
+        "case_id": "pricing-a",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{pricing-a.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{pricing-a.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "update",
+            "{{pricing-a.plan_id}}",
+            "--renewal_price",
+            "49"
+          ]
+        ],
+        "summary": "Set renewal price to the approved value."
+      },
+      {
+        "case_id": "checkout-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{checkout-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{checkout-b.plan_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "checkout-configurations",
+            "get",
+            "{{checkout-b.checkout_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Checkout redirect URL already matches the approved URL."
+      },
+      {
+        "case_id": "storefront-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{storefront-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{storefront-b.plan_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Visible product already has a visible buy-now plan."
+      },
+      {
+        "case_id": "capacity-b",
+        "commands": [
+          [
+            "products",
+            "get",
+            "{{capacity-b.product_id}}",
+            "--format",
+            "json"
+          ],
+          [
+            "plans",
+            "get",
+            "{{capacity-b.plan_id}}",
+            "--format",
+            "json"
+          ]
+        ],
+        "summary": "Plan stock already matches the approved finite limit."
+      }
+    ]
+  }
+}
