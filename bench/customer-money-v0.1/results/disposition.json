@@ -1,0 +1,22 @@
+{
+  "benchmark": "whopbench-customer-money-v0.1",
+  "accepted": [
+    { "attemptId": "a01", "seed": 137, "models": ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] },
+    { "attemptId": "a02", "seed": 271, "models": ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] },
+    { "attemptId": "a03", "seed": 409, "models": ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna"] }
+  ],
+  "excluded": [
+    {
+      "attemptId": "p01",
+      "reason": "Harness-invalid: MCP calls were incorrectly annotated as approval-requiring and were canceled before fixture execution. Sol and Terra artifacts are preserved; Luna's wrapper ended before a result artifact was written."
+    },
+    {
+      "attemptId": "p02",
+      "reason": "Harness-development pilot: Terra ran before strict payment and cancellation payload validation was added. Preserved and excluded."
+    },
+    {
+      "attemptId": "p03",
+      "reason": "Finalized-contract calibration pilot across all three models. Used only to validate separation before the precommitted three-attempt cohort; excluded from aggregation."
+    }
+  ]
+}
