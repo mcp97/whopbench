@@ -1,130 +1,113 @@
 # WhopBench
 
-WhopBench is an execution-based benchmark for AI agents operating synthetic Whop businesses. It measures directed workflow execution at Level 2 and bounded autonomous diagnosis, intervention, observation, and adaptation at Level 3.
-
-The published v0.6 evidence includes the complete five-slice Level 2 cohort and the measured Growth & Retention Level 3 slice. Four additional Level 3 suites are implemented in source with 32 families and 96 deterministic causal variants:
-
-- Business Resilience & Incident Response
-- Product, Offer & Customer Value Optimization
-- Financial & Operational Resource Allocation
-- Trust, Safety & Governance
-
-Each new suite has a finite intervention/adaptation matrix, opaque model-visible package IDs, a ten-call reference lifecycle, a 96-call model ceiling, ordered evidence and verification requirements, idempotency, safety gates, and fail-closed accepted-generation aggregation. The site labels these suites “executable · cohort pending”; they do not enter the leaderboard before the frozen nine-cell cohort for each suite is accepted.
-
-Useful checks:
-
-- `npm run whopbench:level3:new:reference` — regenerate the 96 deterministic reference results.
-- `npm run whopbench:level3:new:test` — run the 55 new harness and completion tests.
-- `npm test` — build and run the complete release tests.
-- `npm run lint` — run the source-quality gate.
+WhopBench is an executable benchmark for measuring whether AI agents can operate a synthetic Whop business safely and economically—not merely call tools or produce plausible recommendations.
 
 Live benchmark: https://whopbench-evaluation.alignedai.chatgpt.site
 
-## Sites runtime
+## Current status
 
-A clean full-stack starter running on
-[vinext](https://github.com/cloudflare/vinext), with optional Cloudflare D1 and
-Drizzle support.
+Level 2 is complete across five measured slices: 40 workflow families, 120 outcomes per model, and 360 graded outcomes.
 
-## Prerequisites
+Level 3 has one measured slice and four additional executable suites whose controlled model cohorts are pending:
 
-- Node.js `>=22.13.0`
-- Linux with `flock`, `curl`, and GNU `timeout`
+| Slice | Families | Variants/model | Status |
+| --- | ---: | ---: | --- |
+| Growth & Retention Experimentation | 8 | 24 | Measured and frozen |
+| Business Resilience & Incident Response | 8 | 24 | Implemented; cohort pending |
+| Product, Offer & Customer Value | 8 | 24 | Implemented; cohort pending |
+| Financial & Operational Resource Allocation | 8 | 24 | Implemented; cohort pending |
+| Trust, Safety & Governance | 8 | 24 | Implemented; cohort pending |
 
-## Sites Lifecycle
+The four new suites contain 32 families, 96 hidden variants, and 1,536 finite initial-action × adaptation paths. Their deterministic references strict-pass 96/96 episodes in exactly 80 calls per attempt. This does not count as model evidence: the completion aggregator fails closed until four provenance-consistent nine-cell Sol/Terra/Luna cohorts are accepted.
 
-The Sites lifecycle CLI runs the locked dependency install before returning this checkout. Edit the source under `app/`, then checkpoint when a coherent milestone is ready to inspect or share. The remote Sites builder runs `npm run build` against the pushed commit. Do not repeat install or build as a normal pre-checkpoint step.
+## Evaluation design
 
-This starter does not use `wrangler.jsonc`.
+Level 2 measures directed execution: resolve entities and authority, perform the requested operation, and verify final state.
 
-`install:ci` is intentionally a single, non-retrying `npm ci`. It refuses a concurrent install for the same project, consumes a matching image-seeded npm cache with `--prefer-offline` while retaining registry fallback for a missing cache object, otherwise downloads and verifies the complete vinext tarball recorded in `package-lock.json`, limits npm to one socket, and terminates a stalled install. `build` applies a short timeout and then validates the Sites artifact. These helpers target Linux and use GNU `timeout`; they are not native macOS scripts.
+Level 3 measures bounded autonomous operation: the objective, authority, constraints, and horizon are fixed, but the agent must diagnose ambiguous state, choose among several legal actions or restraint, precommit a plan, execute, verify, observe an interim checkpoint, adapt, and reach a final economic or safety outcome.
 
-Scripts that need writable project-scoped home, npm, XDG, and temporary paths use `scripts/sites-env.sh`. The `dev` and `start` scripts honor the caller's runtime environment and keep Wrangler logs inside the checkout. The generated `.sites-runtime/` directory is disposable and ignored by Git.
+Slices 2–5 share a deterministic ten-call lifecycle:
 
-## Included Shape
+1. Open the episode.
+2. Read diagnostic evidence.
+3. Read the finite package catalog.
+4. Submit an immutable structured plan.
+5. Apply one bounded initial package or explicit hold.
+6. Verify canonical post-action state.
+7. Advance to T1.
+8. Read interim evidence.
+9. Apply one finite adaptation package.
+10. Advance to T2 and receive the canonical terminal result.
 
-- edit site code under `app/`
-- `app/chatgpt-auth.ts` provides optional dispatch-owned ChatGPT sign-in helpers
-- `.openai/hosting.json` declares optional Sites D1 and R2 bindings
-- `vite.config.ts` simulates declared bindings for local development
-- `db/index.ts` reads the D1 binding from the Cloudflare Worker environment
-- `db/schema.ts` starts intentionally empty
-- `examples/d1/` contains an optional D1 example surface
-- `drizzle.config.ts` supports local migration generation when needed
+Every accepted attempt uses medium reasoning, eight episodes, a 96-call ceiling, three counterbalanced seeds, opaque public package IDs, ordered evidence, unique idempotency keys, and programmatic execution grading. Critical authority or safety violations are a hard attempt-qualification gate.
 
-## Workspace Auth Headers
+## Repository map
 
-OpenAI workspace sites can read the current user's email from
-`oai-authenticated-user-email`.
-
-SIWC-authenticated workspace sites may also receive
-`oai-authenticated-user-full-name` when the user's SIWC profile has a non-empty
-`name` claim. The full-name value is percent-encoded UTF-8 and is accompanied by
-`oai-authenticated-user-full-name-encoding: percent-encoded-utf-8`.
-
-Treat the full name as optional and fall back to email when it is absent:
-
-```tsx
-import { headers } from "next/headers";
-
-export default async function Home() {
-  const requestHeaders = await headers();
-  const email = requestHeaders.get("oai-authenticated-user-email");
-  const encodedFullName = requestHeaders.get("oai-authenticated-user-full-name");
-  const fullName =
-    encodedFullName &&
-    requestHeaders.get("oai-authenticated-user-full-name-encoding") ===
-      "percent-encoded-utf-8"
-      ? decodeURIComponent(encodedFullName)
-      : null;
-
-  const displayName = fullName ?? email;
-  // ...
-}
+```text
+app/                                         public benchmark site
+bench/level3-growth-retention-v0.1/          frozen measured Slice 1
+bench/level3-operations-v0.1/                shared engine and controls for Slices 2–5
+bench/level3-business-resilience-v0.1/       Slice 2
+bench/level3-product-customer-value-v0.1/    Slice 3
+bench/level3-resource-allocation-v0.1/       Slice 4
+bench/level3-trust-governance-v0.1/          Slice 5
+bench/level3-completion-v0.1/                fail-closed five-slice gate
+tests/                                       existing release and render checks
 ```
 
-## Optional Dispatch-Owned ChatGPT Sign-In
+The measured Slice 1 namespace and artifacts are unchanged. Its 20-file accepted artifact set is pinned by checksum in `slice1-adapter.mjs`.
 
-Import the ready-to-use helpers from `app/chatgpt-auth.ts` when the site needs
-optional or required ChatGPT sign-in:
+## Run locally
 
-- Use `getChatGPTUser()` for optional signed-in UI.
-- Use `requireChatGPTUser(returnTo)` for server-rendered pages that should send
-  anonymous visitors through Sign in with ChatGPT.
-- Use `chatGPTSignInPath(returnTo)` and `chatGPTSignOutPath(returnTo)` for
-  browser links or actions.
-- Pass a same-origin relative `returnTo` path for the destination after sign-in
-  or sign-out. The helper validates and safely encodes it.
-- Mark protected pages with `export const dynamic = "force-dynamic"` because
-  they depend on per-request identity headers.
+Requirements: Node.js 22.13+ and npm.
 
-Dispatch owns `/signin-with-chatgpt`, `/signout-with-chatgpt`, `/callback`, the
-OAuth cookies, and identity header injection. Do not implement app routes for
-those reserved paths. Routes that do not import and call the helper remain
-anonymous-compatible.
+```bash
+npm ci
+npm run whopbench:level3:new:reference
+npm run whopbench:level3:new:test
+npm test
+npm run lint
+```
 
-SIWC establishes identity only; it does not prove workspace membership. Use the
-Sites hosting platform's access policy controls for workspace-wide restrictions,
-or enforce explicit server-side membership or allowlist checks.
+`npm run whopbench:level3:new:test` runs 55 deterministic checks covering all 96 variants, finite response matrices, opaque identifiers, 80-call references, ordered evidence, immutable plan/action sequencing, verification, idempotency, namespace isolation, unsafe broad-action rejection, the global call ceiling, the frozen Slice 1 checksum, and the fail-closed completion gate.
 
-Use SIWC for account pages, user-specific dashboards, saved records, and write
-actions tied to the current ChatGPT user. Leave public content anonymous.
+The completion command is expected to exit nonzero while cohorts are pending:
 
-## Diagnostic Commands
+```bash
+npm run whopbench:level3:completion
+```
 
-- `npm run install:ci`: perform the one bounded lockfile install
-- `npm run dev`: start the Vite/Vinext development server
-- `npm run build`: build and validate the deployable Sites artifact
-- `npm run start`: start the built Vinext application
-- `npm test`: build, validate, and verify the rendered development-preview metadata
-- `npm run validate:artifact`: recheck an existing artifact's manifest and ESM `default.fetch` export
-- `npm run db:generate`: generate Drizzle migrations after schema changes
+## Controlled model cohorts
 
-Use build and validation commands for targeted diagnosis after a remote failure, not as part of the normal checkpoint path.
+Running model cells requires `/opt/codex/bin/codex` and an explicitly supplied authentication file. The harness never commits credentials:
 
-The timeout defaults can be overridden for a controlled canary with `SITES_INSTALL_TIMEOUT`, `SITES_INSTALL_KILL_AFTER`, `SITES_BUILD_TIMEOUT`, and `SITES_BUILD_KILL_AFTER`. A timeout fails the command; the helpers never retry an unchanged install or build.
+```bash
+export WHOPBENCH_CODEX_AUTH_FILE=/absolute/path/to/auth.json
+npm run whopbench:level3:resilience:run
+npm run whopbench:level3:product:run
+npm run whopbench:level3:allocation:run
+npm run whopbench:level3:governance:run
+```
 
-## Learn More
+Each runner refuses to overwrite preserved artifacts. Infrastructure-invalid cells are excluded and must be rerun unchanged. Aggregate a slice only after all nine cells are complete:
 
-- [vinext Documentation](https://github.com/cloudflare/vinext)
-- [Drizzle D1 Guide](https://orm.drizzle.team/docs/get-started/d1-new)
+```bash
+npm run whopbench:level3:resilience:aggregate
+npm run whopbench:level3:product:aggregate
+npm run whopbench:level3:allocation:aggregate
+npm run whopbench:level3:governance:aggregate
+```
+
+No benchmark action connects to production Whop, moves real money, contacts real customers, or reads external business data. All entities and outcomes are synthetic fixtures.
+
+## Site runtime
+
+The public interface is a Vinext/React application deployed through ChatGPT Sites. Useful commands:
+
+```bash
+npm run dev
+npm run build
+npm run validate:artifact
+```
+
+The source includes synthetic raw benchmark traces for reproducibility. Generated dependencies, build output, local runtime state, environment files, and credentials are excluded from Git.

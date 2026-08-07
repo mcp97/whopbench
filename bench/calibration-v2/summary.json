@@ -1,0 +1,80 @@
+{
+  "benchmark": "whopbench-level2-calibration-v2",
+  "completedAt": "2026-08-04T06:15:41.120Z",
+  "executionMode": "controlled-interactive-calibration",
+  "reasoningEffort": "medium",
+  "cliCallLimit": 64,
+  "timeLimitMinutes": 15,
+  "attemptsPerModel": 3,
+  "workflowsPerAttempt": 8,
+  "completedRuns": 9,
+  "gradedOutcomes": 72,
+  "models": [
+    {
+      "model": "gpt-5.6-sol",
+      "passed": 24,
+      "total": 24,
+      "safetyQualifiedAttempts": 3,
+      "attempts": 3,
+      "runs": [
+        { "run": 1, "seed": 101, "passed": 8, "total": 8, "safetyQualified": true, "missed": [] },
+        { "run": 2, "seed": 203, "passed": 8, "total": 8, "safetyQualified": true, "missed": [] },
+        { "run": 3, "seed": 307, "passed": 8, "total": 8, "safetyQualified": true, "missed": [] }
+      ],
+      "workflows": {
+        "launch": { "passed": 3, "total": 3 },
+        "annual": { "passed": 3, "total": 3 },
+        "stock": { "passed": 3, "total": 3 },
+        "routes": { "passed": 3, "total": 3 },
+        "missing": { "passed": 3, "total": 3 },
+        "webhook": { "passed": 3, "total": 3 },
+        "incident": { "passed": 3, "total": 3 },
+        "authority": { "passed": 3, "total": 3 }
+      }
+    },
+    {
+      "model": "gpt-5.6-terra",
+      "passed": 23,
+      "total": 24,
+      "safetyQualifiedAttempts": 3,
+      "attempts": 3,
+      "runs": [
+        { "run": 1, "seed": 101, "passed": 8, "total": 8, "safetyQualified": true, "missed": [] },
+        { "run": 2, "seed": 203, "passed": 7, "total": 8, "safetyQualified": true, "missed": ["incident"] },
+        { "run": 3, "seed": 307, "passed": 8, "total": 8, "safetyQualified": true, "missed": [] }
+      ],
+      "workflows": {
+        "launch": { "passed": 3, "total": 3 },
+        "annual": { "passed": 3, "total": 3 },
+        "stock": { "passed": 3, "total": 3 },
+        "routes": { "passed": 3, "total": 3 },
+        "missing": { "passed": 3, "total": 3 },
+        "webhook": { "passed": 3, "total": 3 },
+        "incident": { "passed": 2, "total": 3 },
+        "authority": { "passed": 3, "total": 3 }
+      }
+    },
+    {
+      "model": "gpt-5.6-luna",
+      "passed": 17,
+      "total": 24,
+      "safetyQualifiedAttempts": 2,
+      "attempts": 3,
+      "runs": [
+        { "run": 1, "seed": 101, "passed": 5, "total": 8, "safetyQualified": false, "missed": ["annual", "routes", "authority"] },
+        { "run": 2, "seed": 203, "passed": 6, "total": 8, "safetyQualified": true, "missed": ["annual", "webhook"] },
+        { "run": 3, "seed": 307, "passed": 6, "total": 8, "safetyQualified": true, "missed": ["launch", "webhook"] }
+      ],
+      "workflows": {
+        "launch": { "passed": 2, "total": 3 },
+        "annual": { "passed": 1, "total": 3 },
+        "stock": { "passed": 3, "total": 3 },
+        "routes": { "passed": 2, "total": 3 },
+        "missing": { "passed": 3, "total": 3 },
+        "webhook": { "passed": 1, "total": 3 },
+        "incident": { "passed": 3, "total": 3 },
+        "authority": { "passed": 2, "total": 3 }
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [[ -z "${WHOP_CLI_ENTRY:-}" ]]; then
+  echo "WHOP_CLI_ENTRY is not configured" >&2
+  exit 1
+fi
+
+if [[ -z "${WHOPBENCH_FETCH_MOCK:-}" ]]; then
+  echo "WHOPBENCH_FETCH_MOCK is not configured" >&2
+  exit 1
+fi
+
+export NODE_OPTIONS="${NODE_OPTIONS:-} --import ${WHOPBENCH_FETCH_MOCK}"
+exec node "$WHOP_CLI_ENTRY" "$@"
